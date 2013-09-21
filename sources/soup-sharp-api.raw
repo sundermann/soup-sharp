@@ -131,6 +131,12 @@
       <member cname="SOUP_MESSAGE_HEADERS_RESPONSE" name="Response" value="1"/>
       <member cname="SOUP_MESSAGE_HEADERS_MULTIPART" name="Multipart" value="2"/>
     </enum>
+    <enum name="RequestError" cname="SoupRequestError" type="enum" gtype="soup_request_error_get_type">
+      <member cname="SOUP_REQUEST_ERROR_BAD_URI" name="BadUri" value="0"/>
+      <member cname="SOUP_REQUEST_ERROR_UNSUPPORTED_URI_SCHEME" name="UnsupportedUriScheme" value="1"/>
+      <member cname="SOUP_REQUEST_ERROR_PARSING" name="Parsing" value="2"/>
+      <member cname="SOUP_REQUEST_ERROR_ENCODING" name="Encoding" value="3"/>
+    </enum>
     <enum name="RequesterError" cname="SoupRequesterError" type="enum" gtype="soup_requester_error_get_type">
       <member cname="SOUP_REQUESTER_ERROR_BAD_URI" name="BadUri" value="0"/>
       <member cname="SOUP_REQUESTER_ERROR_UNSUPPORTED_URI_SCHEME" name="UnsupportedUriScheme" value="1"/>
@@ -182,6 +188,178 @@
       <member cname="SOUP_MESSAGE_NEW_CONNECTION" name="NewConnection" value="64"/>
       <member cname="SOUP_MESSAGE_IDEMPOTENT" name="Idempotent" value="128"/>
     </enum>
+    <callback name="AddressCallback" cname="SoupAddressCallback">
+      <return-type type="void"/>
+      <parameters>
+        <parameter name="addr" type="SoupAddress*"/>
+        <parameter name="status" type="guint"/>
+        <parameter closure="2" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <callback name="AuthDomainBasicAuthCallback" cname="SoupAuthDomainBasicAuthCallback">
+      <return-type type="gboolean"/>
+      <parameters>
+        <parameter name="domain" type="SoupAuthDomain*"/>
+        <parameter name="msg" type="SoupMessage*"/>
+        <parameter name="username" type="const-gchar*"/>
+        <parameter name="password" type="const-gchar*"/>
+        <parameter closure="4" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <callback name="AuthDomainDigestAuthCallback" cname="SoupAuthDomainDigestAuthCallback">
+      <return-type type="gchar*" owned="true"/>
+      <parameters>
+        <parameter name="domain" type="SoupAuthDomain*"/>
+        <parameter name="msg" type="SoupMessage*"/>
+        <parameter name="username" type="const-gchar*"/>
+        <parameter closure="3" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <callback name="AuthDomainFilter" cname="SoupAuthDomainFilter">
+      <return-type type="gboolean"/>
+      <parameters>
+        <parameter name="domain" type="SoupAuthDomain*"/>
+        <parameter name="msg" type="SoupMessage*"/>
+        <parameter closure="2" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <callback name="AuthDomainGenericAuthCallback" cname="SoupAuthDomainGenericAuthCallback">
+      <return-type type="gboolean"/>
+      <parameters>
+        <parameter name="domain" type="SoupAuthDomain*"/>
+        <parameter name="msg" type="SoupMessage*"/>
+        <parameter name="username" type="const-gchar*"/>
+        <parameter closure="3" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <callback name="ChunkAllocator" cname="SoupChunkAllocator">
+      <return-type type="SoupBuffer*" owned="true">
+        <warning>missing glib:type-name</warning>
+      </return-type>
+      <parameters>
+        <parameter name="msg" type="SoupMessage*"/>
+        <parameter name="max_len" type="gsize"/>
+        <parameter closure="2" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <callback name="LoggerFilter" cname="SoupLoggerFilter">
+      <return-type type="SoupLoggerLogLevel"/>
+      <parameters>
+        <parameter name="logger" type="SoupLogger*"/>
+        <parameter name="msg" type="SoupMessage*"/>
+        <parameter closure="2" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <callback name="LoggerPrinter" cname="SoupLoggerPrinter">
+      <return-type type="void"/>
+      <parameters>
+        <parameter name="logger" type="SoupLogger*"/>
+        <parameter name="level" type="SoupLoggerLogLevel"/>
+        <parameter name="direction" type="gchar"/>
+        <parameter name="data" type="const-gchar*"/>
+        <parameter closure="4" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <callback name="MessageHeadersForeachFunc" cname="SoupMessageHeadersForeachFunc">
+      <return-type type="void"/>
+      <parameters>
+        <parameter name="name" type="const-gchar*"/>
+        <parameter name="value" type="const-gchar*"/>
+        <parameter closure="2" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <callback name="PasswordManagerCallback" cname="SoupPasswordManagerCallback">
+      <return-type type="void"/>
+      <parameters>
+        <parameter name="arg0" type="SoupPasswordManager*"/>
+        <parameter name="arg1" type="SoupMessage*"/>
+        <parameter name="arg2" type="SoupAuth*"/>
+        <parameter name="retrying" type="gboolean"/>
+        <parameter closure="4" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <callback name="ProxyURIResolverCallback" cname="SoupProxyURIResolverCallback">
+      <return-type type="void"/>
+      <parameters>
+        <parameter name="resolver" type="SoupProxyURIResolver*"/>
+        <parameter name="status" type="guint"/>
+        <parameter name="proxy_uri" type="SoupURI*">
+          <warning>missing glib:type-name</warning>
+        </parameter>
+        <parameter closure="3" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <callback name="ServerCallback" cname="SoupServerCallback">
+      <return-type type="void"/>
+      <parameters>
+        <parameter name="server" type="SoupServer*"/>
+        <parameter name="msg" type="SoupMessage*"/>
+        <parameter name="path" type="const-gchar*"/>
+        <parameter allow-none="1" name="query" type="GHashTable*" element_type="const-gchar*"/>
+        <parameter name="client" type="SoupClientContext*">
+          <warning>missing glib:type-name</warning>
+        </parameter>
+        <parameter closure="5" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <callback name="SessionCallback" cname="SoupSessionCallback">
+      <return-type type="void"/>
+      <parameters>
+        <parameter name="session" type="SoupSession*"/>
+        <parameter name="msg" type="SoupMessage*"/>
+        <parameter closure="2" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <callback name="SocketCallback" cname="SoupSocketCallback">
+      <return-type type="void"/>
+      <parameters>
+        <parameter name="sock" type="SoupSocket*"/>
+        <parameter name="status" type="guint"/>
+        <parameter closure="2" name="user_data" type="gpointer"/>
+      </parameters>
+    </callback>
+    <interface name="PasswordManager" cname="SoupPasswordManager" abstract="false" opaque="false" hidden="false">
+      <class_struct cname="SoupPasswordManagerInterface">
+        <field cname="base" access="public" writeable="false" readable="true" name="Base" type="GTypeInterface">
+          <warning>missing glib:type-name</warning>
+        </field>
+        <method vm="get_passwords_async"/>
+        <method vm="get_passwords_sync"/>
+      </class_struct>
+      <method name="GetType" cname="soup_password_manager_get_type" shared="true">
+        <return-type type="GType"/>
+      </method>
+      <virtual_method name="GetPasswordsAsync" cname="get_passwords_async" hidden="true">
+        <return-type type="void"/>
+        <parameters>
+          <parameter name="arg1" type="SoupMessage*"/>
+          <parameter name="arg2" type="SoupAuth*"/>
+          <parameter name="arg3" type="gboolean"/>
+          <parameter name="arg4" type="GMainContext*">
+            <warning>missing glib:type-name</warning>
+          </parameter>
+          <parameter allow-none="1" name="arg5" type="GCancellable*"/>
+          <parameter name="arg6" type="SoupPasswordManagerCallback"/>
+          <parameter name="arg7" type="gpointer"/>
+        </parameters>
+      </virtual_method>
+      <virtual_method name="GetPasswordsSync" cname="get_passwords_sync">
+        <return-type type="void"/>
+        <parameters>
+          <parameter name="arg1" type="SoupMessage*"/>
+          <parameter name="arg2" type="SoupAuth*"/>
+          <parameter allow-none="1" name="arg3" type="GCancellable*"/>
+        </parameters>
+      </virtual_method>
+      <method name="GetPasswordsSync" cname="soup_password_manager_get_passwords_sync">
+        <return-type type="void"/>
+        <parameters>
+          <parameter name="msg" type="SoupMessage*"/>
+          <parameter name="auth" type="SoupAuth*"/>
+          <parameter allow-none="1" name="cancellable" type="GCancellable*"/>
+        </parameters>
+      </method>
+    </interface>
     <interface name="ProxyURIResolver" cname="SoupProxyURIResolver" abstract="false" opaque="false" hidden="false">
       <class_struct cname="SoupProxyURIResolverInterface">
         <field cname="base" access="public" writeable="false" readable="true" name="Base" type="GTypeInterface">
@@ -363,9 +541,6 @@
       </method>
     </interface>
     <object name="Address" cname="SoupAddress" abstract="false" opaque="false" hidden="false" parent="GObject">
-      <implements>
-        <interface cname="GSocketConnectable"/>
-      </implements>
       <class_struct cname="SoupAddressClass">
         <field cname="parent_class" access="public" writeable="false" readable="true" name="ParentClass" type="GObjectClass">
           <warning>missing glib:type-name</warning>
@@ -422,15 +597,19 @@
       </method>
       <method name="GetGsockaddr" cname="soup_address_get_gsockaddr">
         <return-type type="GSocketAddress*" owned="true"/>
+        <parameters/>
       </method>
       <method name="GetName" cname="soup_address_get_name">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetPhysical" cname="soup_address_get_physical">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetPort" cname="soup_address_get_port">
         <return-type type="guint"/>
+        <parameters/>
       </method>
       <method name="GetSockaddr" cname="soup_address_get_sockaddr">
         <return-type type="gpointer"/>
@@ -440,12 +619,15 @@
       </method>
       <method name="HashByIp" cname="soup_address_hash_by_ip">
         <return-type type="guint"/>
+        <parameters/>
       </method>
       <method name="HashByName" cname="soup_address_hash_by_name">
         <return-type type="guint"/>
+        <parameters/>
       </method>
       <method name="IsResolved" cname="soup_address_is_resolved">
         <return-type type="gboolean"/>
+        <parameters/>
       </method>
       <method name="ResolveAsync" cname="soup_address_resolve_async">
         <return-type type="void"/>
@@ -484,14 +666,11 @@
         <method vm="authenticate"/>
         <method vm="is_authenticated"/>
         <method vm="get_authorization"/>
-        <method vm="_libsoup_reserved1"/>
+        <method vm="is_ready"/>
         <method vm="_libsoup_reserved2"/>
         <method vm="_libsoup_reserved3"/>
         <method vm="_libsoup_reserved4"/>
       </class_struct>
-      <virtual_method name="_libsoupLibsoupReserved1" cname="_libsoup_reserved1" shared="true" hidden="true">
-        <return-type type="void"/>
-      </virtual_method>
       <virtual_method name="_libsoupLibsoupReserved2" cname="_libsoup_reserved2" shared="true" hidden="true">
         <return-type type="void"/>
       </virtual_method>
@@ -534,6 +713,13 @@
       </virtual_method>
       <virtual_method name="IsAuthenticated" cname="is_authenticated">
         <return-type type="gboolean"/>
+        <parameters/>
+      </virtual_method>
+      <virtual_method name="IsReady" cname="is_ready">
+        <return-type type="gboolean"/>
+        <parameters>
+          <parameter name="msg" type="SoupMessage*"/>
+        </parameters>
       </virtual_method>
       <virtual_method name="Update" cname="update">
         <return-type type="gboolean"/>
@@ -557,9 +743,11 @@
       </method>
       <method name="GetHost" cname="soup_auth_get_host">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetInfo" cname="soup_auth_get_info">
         <return-type type="gchar*" owned="true"/>
+        <parameters/>
       </method>
       <method name="GetProtectionSpace" cname="soup_auth_get_protection_space">
         <return-type type="GSList*" element_type="gchar*" elements_owned="true" owned="true"/>
@@ -571,15 +759,45 @@
       </method>
       <method name="GetRealm" cname="soup_auth_get_realm">
         <return-type type="const-gchar*"/>
+        <parameters/>
+      </method>
+      <method name="GetSavedPassword" cname="soup_auth_get_saved_password">
+        <return-type type="const-gchar*"/>
+        <parameters>
+          <parameter name="user" type="const-gchar*"/>
+        </parameters>
       </method>
       <method name="GetSchemeName" cname="soup_auth_get_scheme_name">
         <return-type type="const-gchar*"/>
+        <parameters/>
+      </method>
+      <method name="HasSavedPassword" cname="soup_auth_has_saved_password">
+        <return-type type="void"/>
+        <parameters>
+          <parameter name="username" type="const-gchar*"/>
+          <parameter name="password" type="const-gchar*"/>
+        </parameters>
       </method>
       <method name="IsAuthenticated" cname="soup_auth_is_authenticated">
         <return-type type="gboolean"/>
+        <parameters/>
       </method>
       <method name="IsForProxy" cname="soup_auth_is_for_proxy">
         <return-type type="gboolean"/>
+        <parameters/>
+      </method>
+      <method name="IsReady" cname="soup_auth_is_ready">
+        <return-type type="gboolean"/>
+        <parameters>
+          <parameter name="msg" type="SoupMessage*"/>
+        </parameters>
+      </method>
+      <method name="SavePassword" cname="soup_auth_save_password">
+        <return-type type="void"/>
+        <parameters>
+          <parameter name="username" type="const-gchar*"/>
+          <parameter name="password" type="const-gchar*"/>
+        </parameters>
       </method>
       <method name="Update" cname="soup_auth_update">
         <return-type type="gboolean"/>
@@ -588,18 +806,11 @@
           <parameter name="auth_header" type="const-gchar*"/>
         </parameters>
       </method>
-      <property name="Host" cname="host" type="gchar*" readable="true" writeable="true" construct="false" construct-only="true"/>
-      <property name="Realm" cname="realm" type="gchar*" readable="true" writeable="true" construct="false" construct-only="true"/>
+      <property name="Host" cname="host" type="gchar*" readable="true" writeable="true" construct="false" construct-only="false"/>
+      <property name="Realm" cname="realm" type="gchar*" readable="true" writeable="true" construct="false" construct-only="false"/>
       <property name="SchemeName" cname="scheme-name" type="gchar*" readable="true" writeable="false" construct="false" construct-only="false"/>
       <field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="GObject*"/>
       <field cname="realm" access="public" writeable="false" readable="true" name="RealmField" type="gchar*"/>
-      <signal name="SavePassword" cname="save-password" when="first">
-        <return-type type="void"/>
-        <parameters>
-          <parameter name="username" type="const-gchar*"/>
-          <parameter name="password" type="const-gchar*"/>
-        </parameters>
-      </signal>
     </object>
     <object name="AuthBasic" cname="SoupAuthBasic" abstract="false" opaque="false" hidden="false" parent="SoupAuth">
       <method name="GetType" cname="soup_auth_basic_get_type" shared="true">
@@ -706,6 +917,7 @@
       </method>
       <method name="GetRealm" cname="soup_auth_domain_get_realm">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="RemovePath" cname="soup_auth_domain_remove_path">
         <return-type type="void"/>
@@ -810,6 +1022,41 @@
       <property name="AuthData" cname="auth-data" type="gpointer" readable="true" writeable="true" construct="false" construct-only="false"/>
       <field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="SoupAuthDomain*"/>
     </object>
+    <object name="AuthManager" cname="SoupAuthManager" abstract="false" opaque="false" hidden="false" parent="GObject">
+      <implements>
+        <interface cname="SoupSessionFeature"/>
+      </implements>
+      <class_struct cname="SoupAuthManagerClass">
+        <field cname="parent_class" access="public" writeable="false" readable="true" name="ParentClass" type="GObjectClass">
+          <warning>missing glib:type-name</warning>
+        </field>
+        <method signal_vm="authenticate"/>
+      </class_struct>
+      <method name="GetType" cname="soup_auth_manager_get_type" shared="true">
+        <return-type type="GType"/>
+      </method>
+      <method name="UseAuth" cname="soup_auth_manager_use_auth">
+        <return-type type="void"/>
+        <parameters>
+          <parameter name="uri" type="SoupURI*">
+            <warning>missing glib:type-name</warning>
+          </parameter>
+          <parameter name="auth" type="SoupAuth*"/>
+        </parameters>
+      </method>
+      <field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="GObject*"/>
+      <field cname="priv" access="public" writeable="false" readable="true" name="Priv" type="SoupAuthManagerPrivate*">
+        <warning>missing glib:type-name</warning>
+      </field>
+      <signal name="Authenticate" cname="authenticate" when="first" field_name="authenticate">
+        <return-type type="void"/>
+        <parameters>
+          <parameter name="msg" type="SoupMessage*"/>
+          <parameter name="auth" type="SoupAuth*"/>
+          <parameter name="retrying" type="gboolean"/>
+        </parameters>
+      </signal>
+    </object>
     <object name="AuthNTLM" cname="SoupAuthNTLM" abstract="false" opaque="false" hidden="false" parent="SoupAuth">
       <method name="GetType" cname="soup_auth_ntlm_get_type" shared="true">
         <return-type type="GType"/>
@@ -854,18 +1101,23 @@
       </virtual_method>
       <method name="Clear" cname="soup_cache_clear">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="Dump" cname="soup_cache_dump">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="Flush" cname="soup_cache_flush">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="GetMaxSize" cname="soup_cache_get_max_size">
         <return-type type="guint"/>
+        <parameters/>
       </method>
       <method name="Load" cname="soup_cache_load">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="SetMaxSize" cname="soup_cache_set_max_size">
         <return-type type="void"/>
@@ -954,6 +1206,7 @@
       <constructor cname="soup_content_sniffer_new" disable_void_ctor=""/>
       <virtual_method name="GetBufferSize" cname="get_buffer_size">
         <return-type type="gsize"/>
+        <parameters/>
       </virtual_method>
       <virtual_method name="Sniff" cname="sniff">
         <return-type type="gchar*" owned="true"/>
@@ -967,6 +1220,7 @@
       </virtual_method>
       <method name="GetBufferSize" cname="soup_content_sniffer_get_buffer_size">
         <return-type type="gsize"/>
+        <parameters/>
       </method>
       <method name="Sniff" cname="soup_content_sniffer_sniff">
         <return-type type="gchar*" owned="true"/>
@@ -1009,9 +1263,11 @@
       <constructor cname="soup_cookie_jar_new" disable_void_ctor=""/>
       <virtual_method name="IsPersistent" cname="is_persistent">
         <return-type type="gboolean"/>
+        <parameters/>
       </virtual_method>
-      <virtual_method name="Save" cname="save">
+      <virtual_method name="Save" cname="save" deprecated="true">
         <return-type type="void"/>
+        <parameters/>
       </virtual_method>
       <method name="AddCookie" cname="soup_cookie_jar_add_cookie">
         <return-type type="void"/>
@@ -1036,6 +1292,7 @@
         <return-type type="GSList*" element_type="GSList*" elements_owned="true" owned="true">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="DeleteCookie" cname="soup_cookie_jar_delete_cookie">
         <return-type type="void"/>
@@ -1047,6 +1304,7 @@
       </method>
       <method name="GetAcceptPolicy" cname="soup_cookie_jar_get_accept_policy">
         <return-type type="SoupCookieJarAcceptPolicy"/>
+        <parameters/>
       </method>
       <method name="GetCookieList" cname="soup_cookie_jar_get_cookie_list">
         <return-type type="GSList*" element_type="GSList*" elements_owned="true" owned="true">
@@ -1070,9 +1328,11 @@
       </method>
       <method name="IsPersistent" cname="soup_cookie_jar_is_persistent">
         <return-type type="gboolean"/>
+        <parameters/>
       </method>
-      <method name="Save" cname="soup_cookie_jar_save">
+      <method name="Save" cname="soup_cookie_jar_save" deprecated="true">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="SetAcceptPolicy" cname="soup_cookie_jar_set_accept_policy">
         <return-type type="void"/>
@@ -1115,6 +1375,43 @@
           </parameter>
         </parameters>
       </signal>
+    </object>
+    <object name="CookieJarDB" cname="SoupCookieJarDB" abstract="false" opaque="false" hidden="false" parent="SoupCookieJar">
+      <implements>
+        <interface cname="SoupSessionFeature"/>
+      </implements>
+      <class_struct cname="SoupCookieJarDBClass">
+        <field cname="parent_class" access="public" writeable="false" readable="true" name="ParentClass" type="SoupCookieJarClass">
+          <warning>missing glib:type-name</warning>
+        </field>
+        <method vm="_libsoup_reserved1"/>
+        <method vm="_libsoup_reserved2"/>
+        <method vm="_libsoup_reserved3"/>
+        <method vm="_libsoup_reserved4"/>
+      </class_struct>
+      <virtual_method name="_libsoupLibsoupReserved1" cname="_libsoup_reserved1" shared="true" hidden="true">
+        <return-type type="void"/>
+      </virtual_method>
+      <virtual_method name="_libsoupLibsoupReserved2" cname="_libsoup_reserved2" shared="true" hidden="true">
+        <return-type type="void"/>
+      </virtual_method>
+      <virtual_method name="_libsoupLibsoupReserved3" cname="_libsoup_reserved3" shared="true" hidden="true">
+        <return-type type="void"/>
+      </virtual_method>
+      <virtual_method name="_libsoupLibsoupReserved4" cname="_libsoup_reserved4" shared="true" hidden="true">
+        <return-type type="void"/>
+      </virtual_method>
+      <method name="GetType" cname="soup_cookie_jar_db_get_type" shared="true">
+        <return-type type="GType"/>
+      </method>
+      <constructor cname="soup_cookie_jar_db_new">
+        <parameters>
+          <parameter name="filename" type="const-gchar*"/>
+          <parameter name="read_only" type="gboolean"/>
+        </parameters>
+      </constructor>
+      <property name="Filename" cname="filename" type="gchar*" readable="true" writeable="true" construct="false" construct-only="true"/>
+      <field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="SoupCookieJar*"/>
     </object>
     <object name="CookieJarText" cname="SoupCookieJarText" abstract="false" opaque="false" hidden="false" parent="SoupCookieJar">
       <implements>
@@ -1282,17 +1579,21 @@
       </method>
       <method name="GetAddress" cname="soup_message_get_address">
         <return-type type="SoupAddress*"/>
+        <parameters/>
       </method>
       <method name="GetFirstParty" cname="soup_message_get_first_party">
         <return-type type="SoupURI*">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="GetFlags" cname="soup_message_get_flags">
         <return-type type="SoupMessageFlags"/>
+        <parameters/>
       </method>
       <method name="GetHttpVersion" cname="soup_message_get_http_version">
         <return-type type="SoupHTTPVersion"/>
+        <parameters/>
       </method>
       <method name="GetHttpsStatus" cname="soup_message_get_https_status">
         <return-type type="gboolean"/>
@@ -1305,11 +1606,13 @@
         <return-type type="SoupURI*">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="IsKeepalive" cname="soup_message_is_keepalive">
         <return-type type="gboolean"/>
+        <parameters/>
       </method>
-      <method name="SetChunkAllocator" cname="soup_message_set_chunk_allocator">
+      <method name="SetChunkAllocator" cname="soup_message_set_chunk_allocator" deprecated="true">
         <return-type type="void"/>
         <parameters>
           <parameter closure="1" destroy="2" scope="notified" name="allocator" type="SoupChunkAllocator"/>
@@ -1502,6 +1805,7 @@
         <return-type type="SoupMessageHeaders*">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="NextPart" cname="soup_multipart_input_stream_next_part">
         <return-type type="GInputStream*" owned="true"/>
@@ -1522,7 +1826,7 @@
       <method name="NextPartFinish" cname="soup_multipart_input_stream_next_part_finish">
         <return-type type="GInputStream*" owned="true"/>
         <parameters throws="1">
-          <parameter name="res" type="GAsyncResult*"/>
+          <parameter name="_result" type="GAsyncResult*"/>
           <parameter name="error" type="GError**"/>
         </parameters>
       </method>
@@ -1549,9 +1853,6 @@
       <field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="GObject*"/>
     </object>
     <object name="Request" cname="SoupRequest" abstract="false" opaque="false" hidden="false" parent="GObject">
-      <implements>
-        <interface cname="GInitable"/>
-      </implements>
       <class_struct cname="SoupRequestClass">
         <field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="GObjectClass">
           <warning>missing glib:type-name</warning>
@@ -1578,9 +1879,11 @@
       </virtual_method>
       <virtual_method name="GetContentLength" cname="get_content_length">
         <return-type type="gint64"/>
+        <parameters/>
       </virtual_method>
       <virtual_method name="GetContentType" cname="get_content_type">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </virtual_method>
       <virtual_method name="Send" cname="send">
         <return-type type="GInputStream*" owned="true"/>
@@ -1606,17 +1909,21 @@
       </virtual_method>
       <method name="GetContentLength" cname="soup_request_get_content_length">
         <return-type type="gint64"/>
+        <parameters/>
       </method>
       <method name="GetContentType" cname="soup_request_get_content_type">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetSession" cname="soup_request_get_session">
         <return-type type="SoupSession*"/>
+        <parameters/>
       </method>
       <method name="GetUri" cname="soup_request_get_uri">
         <return-type type="SoupURI*">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="Send" cname="soup_request_send">
         <return-type type="GInputStream*" owned="true"/>
@@ -1648,9 +1955,6 @@
       </field>
     </object>
     <object name="RequestData" cname="SoupRequestData" abstract="false" opaque="false" hidden="false" parent="SoupRequest">
-      <implements>
-        <interface cname="GInitable"/>
-      </implements>
       <class_struct cname="SoupRequestDataClass">
         <field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="SoupRequestClass">
           <warning>missing glib:type-name</warning>
@@ -1665,9 +1969,6 @@
       </field>
     </object>
     <object name="RequestFile" cname="SoupRequestFile" abstract="false" opaque="false" hidden="false" parent="SoupRequest">
-      <implements>
-        <interface cname="GInitable"/>
-      </implements>
       <class_struct cname="SoupRequestFileClass">
         <field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="SoupRequestClass">
           <warning>missing glib:type-name</warning>
@@ -1678,6 +1979,7 @@
       </method>
       <method name="GetFile" cname="soup_request_file_get_file">
         <return-type type="GFile*" owned="true"/>
+        <parameters/>
       </method>
       <field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="SoupRequest*"/>
       <field cname="priv" access="public" writeable="false" readable="true" name="Priv" type="SoupRequestFilePrivate*">
@@ -1685,9 +1987,6 @@
       </field>
     </object>
     <object name="RequestHTTP" cname="SoupRequestHTTP" abstract="false" opaque="false" hidden="false" parent="SoupRequest">
-      <implements>
-        <interface cname="GInitable"/>
-      </implements>
       <class_struct cname="SoupRequestHTTPClass">
         <field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="SoupRequestClass">
           <warning>missing glib:type-name</warning>
@@ -1698,6 +1997,7 @@
       </method>
       <method name="GetMessage" cname="soup_request_http_get_message">
         <return-type type="SoupMessage*" owned="true"/>
+        <parameters/>
       </method>
       <field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="SoupRequest*"/>
       <field cname="priv" access="public" writeable="false" readable="true" name="Priv" type="SoupRequestHTTPPrivate*">
@@ -1717,22 +2017,6 @@
         <return-type type="GType"/>
       </method>
       <constructor cname="soup_requester_new" disable_void_ctor=""/>
-      <method name="Request" cname="soup_requester_request">
-        <return-type type="SoupRequest*" owned="true"/>
-        <parameters throws="1">
-          <parameter name="uri_string" type="const-gchar*"/>
-          <parameter name="error" type="GError**"/>
-        </parameters>
-      </method>
-      <method name="RequestUri" cname="soup_requester_request_uri">
-        <return-type type="SoupRequest*" owned="true"/>
-        <parameters throws="1">
-          <parameter name="uri" type="SoupURI*">
-            <warning>missing glib:type-name</warning>
-          </parameter>
-          <parameter name="error" type="GError**"/>
-        </parameters>
-      </method>
       <field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="GObject*"/>
       <field cname="priv" access="public" writeable="false" readable="true" name="Priv" type="SoupRequesterPrivate*">
         <warning>missing glib:type-name</warning>
@@ -1784,20 +2068,25 @@
       </method>
       <method name="Disconnect" cname="soup_server_disconnect">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="GetAsyncContext" cname="soup_server_get_async_context">
         <return-type type="GMainContext*">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="GetListener" cname="soup_server_get_listener">
         <return-type type="SoupSocket*"/>
+        <parameters/>
       </method>
       <method name="GetPort" cname="soup_server_get_port">
         <return-type type="guint"/>
+        <parameters/>
       </method>
       <method name="IsHttps" cname="soup_server_is_https">
         <return-type type="gboolean"/>
+        <parameters/>
       </method>
       <method name="PauseMessage" cname="soup_server_pause_message">
         <return-type type="void"/>
@@ -1807,6 +2096,7 @@
       </method>
       <method name="Quit" cname="soup_server_quit">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="RemoveAuthDomain" cname="soup_server_remove_auth_domain">
         <return-type type="void"/>
@@ -1822,9 +2112,11 @@
       </method>
       <method name="Run" cname="soup_server_run">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="RunAsync" cname="soup_server_run_async">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="UnpauseMessage" cname="soup_server_unpause_message">
         <return-type type="void"/>
@@ -1878,7 +2170,7 @@
         </parameters>
       </signal>
     </object>
-    <object name="Session" cname="SoupSession" abstract="true" opaque="false" hidden="false" parent="GObject">
+    <object name="Session" cname="SoupSession" abstract="false" opaque="false" hidden="false" parent="GObject">
       <class_struct cname="SoupSessionClass">
         <field cname="parent_class" access="public" writeable="false" readable="true" name="ParentClass" type="GObjectClass">
           <warning>missing glib:type-name</warning>
@@ -1900,6 +2192,7 @@
       <method name="GetType" cname="soup_session_get_type" shared="true">
         <return-type type="GType"/>
       </method>
+      <constructor cname="soup_session_new" disable_void_ctor=""/>
       <virtual_method name="AuthRequired" cname="auth_required">
         <return-type type="void"/>
         <parameters>
@@ -1917,9 +2210,11 @@
       </virtual_method>
       <virtual_method name="FlushQueue" cname="flush_queue">
         <return-type type="void"/>
+        <parameters/>
       </virtual_method>
       <virtual_method name="Kick" cname="kick">
         <return-type type="void"/>
+        <parameters/>
       </virtual_method>
       <virtual_method name="QueueMessage" cname="queue_message">
         <return-type type="void"/>
@@ -1943,6 +2238,7 @@
       </virtual_method>
       <method name="Abort" cname="soup_session_abort">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="AddFeature" cname="soup_session_add_feature">
         <return-type type="void"/>
@@ -1967,6 +2263,7 @@
         <return-type type="GMainContext*">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="GetFeature" cname="soup_session_get_feature">
         <return-type type="SoupSessionFeature*"/>
@@ -1983,6 +2280,12 @@
       </method>
       <method name="GetFeatures" cname="soup_session_get_features">
         <return-type type="GSList*" element_type="SoupSessionFeature*" elements_owned="true"/>
+        <parameters>
+          <parameter name="feature_type" type="GType"/>
+        </parameters>
+      </method>
+      <method name="HasFeature" cname="soup_session_has_feature">
+        <return-type type="gboolean"/>
         <parameters>
           <parameter name="feature_type" type="GType"/>
         </parameters>
@@ -2036,10 +2339,53 @@
           <parameter name="feature_type" type="GType"/>
         </parameters>
       </method>
+      <method name="Request" cname="soup_session_request">
+        <return-type type="SoupRequest*" owned="true"/>
+        <parameters throws="1">
+          <parameter name="uri_string" type="const-gchar*"/>
+          <parameter name="error" type="GError**"/>
+        </parameters>
+      </method>
+      <method name="RequestHttp" cname="soup_session_request_http">
+        <return-type type="SoupRequestHTTP*" owned="true"/>
+        <parameters throws="1">
+          <parameter name="method" type="const-gchar*"/>
+          <parameter name="uri_string" type="const-gchar*"/>
+          <parameter name="error" type="GError**"/>
+        </parameters>
+      </method>
+      <method name="RequestHttpUri" cname="soup_session_request_http_uri">
+        <return-type type="SoupRequestHTTP*" owned="true"/>
+        <parameters throws="1">
+          <parameter name="method" type="const-gchar*"/>
+          <parameter name="uri" type="SoupURI*">
+            <warning>missing glib:type-name</warning>
+          </parameter>
+          <parameter name="error" type="GError**"/>
+        </parameters>
+      </method>
+      <method name="RequestUri" cname="soup_session_request_uri">
+        <return-type type="SoupRequest*" owned="true"/>
+        <parameters throws="1">
+          <parameter name="uri" type="SoupURI*">
+            <warning>missing glib:type-name</warning>
+          </parameter>
+          <parameter name="error" type="GError**"/>
+        </parameters>
+      </method>
       <method name="RequeueMessage" cname="soup_session_requeue_message">
         <return-type type="void"/>
         <parameters>
           <parameter name="msg" type="SoupMessage*"/>
+        </parameters>
+      </method>
+      <method name="SendAsync" cname="soup_session_send_async">
+        <return-type type="void"/>
+        <parameters>
+          <parameter name="msg" type="SoupMessage*"/>
+          <parameter allow-none="1" name="cancellable" type="GCancellable*"/>
+          <parameter closure="3" scope="async" allow-none="1" name="callback" type="GAsyncReadyCallback"/>
+          <parameter name="user_data" type="gpointer"/>
         </parameters>
       </method>
       <method name="SendMessage" cname="soup_session_send_message">
@@ -2064,8 +2410,10 @@
       <property name="AcceptLanguageAuto" cname="accept-language-auto" type="gboolean" readable="true" writeable="true" construct="false" construct-only="false"/>
       <property name="AsyncContext" cname="async-context" type="gpointer" readable="true" writeable="true" construct="false" construct-only="true"/>
       <property name="IdleTimeout" cname="idle-timeout" type="guint" readable="true" writeable="true" construct="false" construct-only="false"/>
+      <property name="LocalAddress" cname="local-address" type="SoupAddress*" readable="true" writeable="true" construct="false" construct-only="true"/>
       <property name="MaxConns" cname="max-conns" type="gint" readable="true" writeable="true" construct="false" construct-only="false"/>
       <property name="MaxConnsPerHost" cname="max-conns-per-host" type="gint" readable="true" writeable="true" construct="false" construct-only="false"/>
+      <property name="ProxyResolver" cname="proxy-resolver" type="GProxyResolver*" readable="true" writeable="true" construct="false" construct-only="false"/>
       <property name="ProxyUri" cname="proxy-uri" type="SoupURI*" readable="true" writeable="true" construct="false" construct-only="false"/>
       <property name="SslCaFile" cname="ssl-ca-file" type="gchar*" readable="true" writeable="true" construct="false" construct-only="false"/>
       <property name="SslStrict" cname="ssl-strict" type="gboolean" readable="true" writeable="true" construct="false" construct-only="false"/>
@@ -2217,24 +2565,31 @@
       </method>
       <method name="Disconnect" cname="soup_socket_disconnect">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="GetFd" cname="soup_socket_get_fd">
         <return-type type="gint"/>
+        <parameters/>
       </method>
       <method name="GetLocalAddress" cname="soup_socket_get_local_address">
         <return-type type="SoupAddress*"/>
+        <parameters/>
       </method>
       <method name="GetRemoteAddress" cname="soup_socket_get_remote_address">
         <return-type type="SoupAddress*"/>
+        <parameters/>
       </method>
       <method name="IsConnected" cname="soup_socket_is_connected">
         <return-type type="gboolean"/>
+        <parameters/>
       </method>
       <method name="IsSsl" cname="soup_socket_is_ssl">
         <return-type type="gboolean"/>
+        <parameters/>
       </method>
       <method name="Listen" cname="soup_socket_listen">
         <return-type type="gboolean"/>
+        <parameters/>
       </method>
       <method name="Read" cname="soup_socket_read">
         <return-type type="SoupSocketIOStatus"/>
@@ -2287,6 +2642,7 @@
       <property name="IsServer" cname="is-server" type="gboolean" readable="true" writeable="false" construct="false" construct-only="false"/>
       <property name="LocalAddress" cname="local-address" type="SoupAddress*" readable="true" writeable="true" construct="false" construct-only="true"/>
       <property name="NonBlocking" cname="non-blocking" type="gboolean" readable="true" writeable="true" construct="false" construct-only="false"/>
+      <property name="ProxyResolver" cname="proxy-resolver" type="GProxyResolver*" readable="true" writeable="true" construct="false" construct-only="true"/>
       <property name="RemoteAddress" cname="remote-address" type="SoupAddress*" readable="true" writeable="true" construct="false" construct-only="true"/>
       <property name="SslCreds" cname="ssl-creds" type="gpointer" readable="true" writeable="true" construct="false" construct-only="false"/>
       <property name="SslFallback" cname="ssl-fallback" type="gboolean" readable="true" writeable="true" construct="false" construct-only="true"/>
@@ -2295,7 +2651,6 @@
       <property name="TlsCertificate" cname="tls-certificate" type="GTlsCertificate*" readable="true" writeable="false" construct="false" construct-only="false"/>
       <property name="TlsErrors" cname="tls-errors" type="GTlsCertificateFlags" readable="true" writeable="false" construct="false" construct-only="false"/>
       <property name="TrustedCertificate" cname="trusted-certificate" type="gboolean" readable="true" writeable="false" construct="false" construct-only="false"/>
-      <property name="UseProxy" cname="use-proxy" type="gboolean" readable="true" writeable="true" construct="false" construct-only="true"/>
       <property name="UseThreadContext" cname="use-thread-context" type="gboolean" readable="true" writeable="true" construct="false" construct-only="true"/>
       <field cname="parent" access="public" writeable="false" readable="true" name="Parent" type="GObject*"/>
       <signal name="Disconnected" cname="disconnected" when="last" field_name="disconnected">
@@ -2324,6 +2679,7 @@
         <parameters/>
       </signal>
     </object>
+    <struct name="AuthManagerPrivate" cname="SoupAuthManagerPrivate" opaque="true" hidden="true"/>
     <boxed name="Buffer" cname="SoupBuffer" opaque="false" hidden="false">
       <method name="GetType" cname="soup_buffer_get_type" shared="true">
         <return-type type="GType"/>
@@ -2355,14 +2711,17 @@
         <return-type type="SoupBuffer*" owned="true">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="Free" cname="soup_buffer_free">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="GetAsBytes" cname="soup_buffer_get_as_bytes">
         <return-type type="GBytes*" owned="true">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="GetData" cname="soup_buffer_get_data">
         <return-type type="void"/>
@@ -2373,6 +2732,7 @@
       </method>
       <method name="GetOwner" cname="soup_buffer_get_owner">
         <return-type type="gpointer"/>
+        <parameters/>
       </method>
       <method name="NewSubbuffer" cname="soup_buffer_new_subbuffer">
         <return-type type="SoupBuffer*" owned="true">
@@ -2391,18 +2751,23 @@
       </method>
       <method name="GetAddress" cname="soup_client_context_get_address">
         <return-type type="SoupAddress*"/>
+        <parameters/>
       </method>
       <method name="GetAuthDomain" cname="soup_client_context_get_auth_domain">
         <return-type type="SoupAuthDomain*"/>
+        <parameters/>
       </method>
       <method name="GetAuthUser" cname="soup_client_context_get_auth_user">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetHost" cname="soup_client_context_get_host">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetSocket" cname="soup_client_context_get_socket">
         <return-type type="SoupSocket*"/>
+        <parameters/>
       </method>
     </boxed>
     <struct name="Connection" cname="SoupConnection" opaque="true" hidden="false"/>
@@ -2442,6 +2807,7 @@
         <return-type type="SoupCookie*" owned="true">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="DomainMatches" cname="soup_cookie_domain_matches">
         <return-type type="gboolean"/>
@@ -2459,29 +2825,37 @@
       </method>
       <method name="Free" cname="soup_cookie_free">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="GetDomain" cname="soup_cookie_get_domain">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetExpires" cname="soup_cookie_get_expires">
         <return-type type="SoupDate*">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="GetHttpOnly" cname="soup_cookie_get_http_only">
         <return-type type="gboolean"/>
+        <parameters/>
       </method>
       <method name="GetName" cname="soup_cookie_get_name">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetPath" cname="soup_cookie_get_path">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetSecure" cname="soup_cookie_get_secure">
         <return-type type="gboolean"/>
+        <parameters/>
       </method>
       <method name="GetValue" cname="soup_cookie_get_value">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="SetDomain" cname="soup_cookie_set_domain">
         <return-type type="void"/>
@@ -2535,9 +2909,11 @@
       </method>
       <method name="ToCookieHeader" cname="soup_cookie_to_cookie_header">
         <return-type type="gchar*" owned="true"/>
+        <parameters/>
       </method>
       <method name="ToSetCookieHeader" cname="soup_cookie_to_set_cookie_header">
         <return-type type="gchar*" owned="true"/>
+        <parameters/>
       </method>
       <method name="Parse" cname="soup_cookie_parse" shared="true">
         <return-type type="SoupCookie*" owned="true">
@@ -2592,36 +2968,47 @@
         <return-type type="SoupDate*" owned="true">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="Free" cname="soup_date_free">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="GetDay" cname="soup_date_get_day">
         <return-type type="gint"/>
+        <parameters/>
       </method>
       <method name="GetHour" cname="soup_date_get_hour">
         <return-type type="gint"/>
+        <parameters/>
       </method>
       <method name="GetMinute" cname="soup_date_get_minute">
         <return-type type="gint"/>
+        <parameters/>
       </method>
       <method name="GetMonth" cname="soup_date_get_month">
         <return-type type="gint"/>
+        <parameters/>
       </method>
       <method name="GetOffset" cname="soup_date_get_offset">
         <return-type type="gint"/>
+        <parameters/>
       </method>
       <method name="GetSecond" cname="soup_date_get_second">
         <return-type type="gint"/>
+        <parameters/>
       </method>
       <method name="GetUtc" cname="soup_date_get_utc">
         <return-type type="gint"/>
+        <parameters/>
       </method>
       <method name="GetYear" cname="soup_date_get_year">
         <return-type type="gint"/>
+        <parameters/>
       </method>
       <method name="IsPast" cname="soup_date_is_past">
         <return-type type="gboolean"/>
+        <parameters/>
       </method>
       <method name="ToString" cname="soup_date_to_string">
         <return-type type="gchar*" owned="true"/>
@@ -2631,6 +3018,7 @@
       </method>
       <method name="ToTimeT" cname="soup_date_to_time_t">
         <return-type type="glong"/>
+        <parameters/>
       </method>
       <method name="ToTimeval" cname="soup_date_to_timeval">
         <return-type type="void"/>
@@ -2673,17 +3061,21 @@
       </method>
       <method name="Complete" cname="soup_message_body_complete">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="Flatten" cname="soup_message_body_flatten">
         <return-type type="SoupBuffer*" owned="true">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="Free" cname="soup_message_body_free">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="GetAccumulate" cname="soup_message_body_get_accumulate">
         <return-type type="gboolean"/>
+        <parameters/>
       </method>
       <method name="GetChunk" cname="soup_message_body_get_chunk">
         <return-type type="SoupBuffer*" owned="true">
@@ -2709,6 +3101,7 @@
       </method>
       <method name="Truncate" cname="soup_message_body_truncate">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="WroteChunk" cname="soup_message_body_wrote_chunk">
         <return-type type="void"/>
@@ -2737,9 +3130,11 @@
       </method>
       <method name="CleanConnectionHeaders" cname="soup_message_headers_clean_connection_headers">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="Clear" cname="soup_message_headers_clear">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="Foreach" cname="soup_message_headers_foreach">
         <return-type type="void"/>
@@ -2750,6 +3145,7 @@
       </method>
       <method name="Free" cname="soup_message_headers_free">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="FreeRanges" cname="soup_message_headers_free_ranges">
         <return-type type="void"/>
@@ -2774,6 +3170,7 @@
       </method>
       <method name="GetContentLength" cname="soup_message_headers_get_content_length">
         <return-type type="gint64"/>
+        <parameters/>
       </method>
       <method name="GetContentRange" cname="soup_message_headers_get_content_range">
         <return-type type="gboolean"/>
@@ -2791,9 +3188,11 @@
       </method>
       <method name="GetEncoding" cname="soup_message_headers_get_encoding">
         <return-type type="SoupEncoding"/>
+        <parameters/>
       </method>
       <method name="GetExpectations" cname="soup_message_headers_get_expectations">
         <return-type type="SoupExpectation"/>
+        <parameters/>
       </method>
       <method name="GetList" cname="soup_message_headers_get_list">
         <return-type type="const-gchar*"/>
@@ -2960,9 +3359,11 @@
       </method>
       <method name="Free" cname="soup_multipart_free">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="GetLength" cname="soup_multipart_get_length">
         <return-type type="gint"/>
+        <parameters/>
       </method>
       <method name="GetPart" cname="soup_multipart_get_part">
         <return-type type="gboolean"/>
@@ -3019,11 +3420,13 @@
         <return-type type="SoupURI*" owned="true">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="CopyHost" cname="soup_uri_copy_host">
         <return-type type="SoupURI*" owned="true">
           <warning>missing glib:type-name</warning>
         </return-type>
+        <parameters/>
       </method>
       <method name="Equal" cname="soup_uri_equal">
         <return-type type="gboolean"/>
@@ -3035,30 +3438,39 @@
       </method>
       <method name="Free" cname="soup_uri_free">
         <return-type type="void"/>
+        <parameters/>
       </method>
       <method name="GetFragment" cname="soup_uri_get_fragment">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetHost" cname="soup_uri_get_host">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetPassword" cname="soup_uri_get_password">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetPath" cname="soup_uri_get_path">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetPort" cname="soup_uri_get_port">
         <return-type type="guint"/>
+        <parameters/>
       </method>
       <method name="GetQuery" cname="soup_uri_get_query">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetScheme" cname="soup_uri_get_scheme">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="GetUser" cname="soup_uri_get_user">
         <return-type type="const-gchar*"/>
+        <parameters/>
       </method>
       <method name="HostEqual" cname="soup_uri_host_equal">
         <return-type type="gboolean"/>
@@ -3070,6 +3482,7 @@
       </method>
       <method name="HostHash" cname="soup_uri_host_hash">
         <return-type type="guint"/>
+        <parameters/>
       </method>
       <method name="NewWithBase" cname="soup_uri_new_with_base">
         <return-type type="SoupURI*" owned="true">
@@ -3141,6 +3554,7 @@
       </method>
       <method name="UsesDefaultPort" cname="soup_uri_uses_default_port">
         <return-type type="gboolean"/>
+        <parameters/>
       </method>
       <method name="Decode" cname="soup_uri_decode" shared="true">
         <return-type type="gchar*" owned="true"/>
@@ -3163,769 +3577,6 @@
         </parameters>
       </method>
     </boxed>
-    <callback name="AddressCallback" cname="SoupAddressCallback">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="addr" type="SoupAddress*"/>
-        <parameter name="status" type="guint"/>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="AuthDomainBasicAuthCallback" cname="SoupAuthDomainBasicAuthCallback">
-      <return-type type="gboolean"/>
-      <parameters>
-        <parameter name="domain" type="SoupAuthDomain*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="username" type="const-gchar*"/>
-        <parameter name="password" type="const-gchar*"/>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="AuthDomainDigestAuthCallback" cname="SoupAuthDomainDigestAuthCallback">
-      <return-type type="gchar*" owned="true"/>
-      <parameters>
-        <parameter name="domain" type="SoupAuthDomain*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="username" type="const-gchar*"/>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="AuthDomainFilter" cname="SoupAuthDomainFilter">
-      <return-type type="gboolean"/>
-      <parameters>
-        <parameter name="domain" type="SoupAuthDomain*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="AuthDomainGenericAuthCallback" cname="SoupAuthDomainGenericAuthCallback">
-      <return-type type="gboolean"/>
-      <parameters>
-        <parameter name="domain" type="SoupAuthDomain*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="username" type="const-gchar*"/>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="ChunkAllocator" cname="SoupChunkAllocator">
-      <return-type type="SoupBuffer*" owned="true">
-        <warning>missing glib:type-name</warning>
-      </return-type>
-      <parameters>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="max_len" type="gsize"/>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="LoggerFilter" cname="SoupLoggerFilter">
-      <return-type type="SoupLoggerLogLevel"/>
-      <parameters>
-        <parameter name="logger" type="SoupLogger*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="LoggerPrinter" cname="SoupLoggerPrinter">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="logger" type="SoupLogger*"/>
-        <parameter name="level" type="SoupLoggerLogLevel"/>
-        <parameter name="direction" type="gchar"/>
-        <parameter name="data" type="const-gchar*"/>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="MessageHeadersForeachFunc" cname="SoupMessageHeadersForeachFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="name" type="const-gchar*"/>
-        <parameter name="value" type="const-gchar*"/>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="ProxyURIResolverCallback" cname="SoupProxyURIResolverCallback">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="resolver" type="SoupProxyURIResolver*"/>
-        <parameter name="status" type="guint"/>
-        <parameter name="proxy_uri" type="SoupURI*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="ServerCallback" cname="SoupServerCallback">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="server" type="SoupServer*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="path" type="const-gchar*"/>
-        <parameter allow-none="1" name="query" type="GHashTable*" element_type="const-gchar*"/>
-        <parameter name="client" type="SoupClientContext*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="SessionCallback" cname="SoupSessionCallback">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="session" type="SoupSession*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="SocketCallback" cname="SoupSocketCallback">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="sock" type="SoupSocket*"/>
-        <parameter name="status" type="guint"/>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="Update" cname="SoupUpdateFunc">
-      <return-type type="gboolean"/>
-      <parameters>
-        <parameter name="auth" type="SoupAuth*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="auth_header" type="GHashTable*" element_type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="GetProtectionSpace" cname="SoupGetProtectionSpaceFunc">
-      <return-type type="GSList*" element_type="gchar*" elements_owned="true" owned="true"/>
-      <parameters>
-        <parameter name="auth" type="SoupAuth*"/>
-        <parameter name="source_uri" type="SoupURI*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-      </parameters>
-    </callback>
-    <callback name="Authenticate" cname="SoupAuthenticateFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="auth" type="SoupAuth*"/>
-        <parameter name="username" type="const-gchar*"/>
-        <parameter name="password" type="const-gchar*"/>
-      </parameters>
-    </callback>
-    <callback name="IsAuthenticated" cname="SoupIsAuthenticatedFunc">
-      <return-type type="gboolean"/>
-      <parameters>
-        <parameter name="auth" type="SoupAuth*"/>
-      </parameters>
-    </callback>
-    <callback name="GetAuthorization" cname="SoupGetAuthorizationFunc">
-      <return-type type="gchar*" owned="true"/>
-      <parameters>
-        <parameter name="auth" type="SoupAuth*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="Accepts" cname="SoupAcceptsFunc">
-      <return-type type="gchar*" owned="true"/>
-      <parameters>
-        <parameter name="domain" type="SoupAuthDomain*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="header" type="const-gchar*"/>
-      </parameters>
-    </callback>
-    <callback name="Challenge" cname="SoupChallengeFunc">
-      <return-type type="gchar*" owned="true"/>
-      <parameters>
-        <parameter name="domain" type="SoupAuthDomain*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="CheckPassword" cname="SoupCheckPasswordFunc">
-      <return-type type="gboolean"/>
-      <parameters>
-        <parameter name="domain" type="SoupAuthDomain*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="username" type="const-gchar*"/>
-        <parameter name="password" type="const-gchar*"/>
-      </parameters>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="GetCacheability" cname="SoupGetCacheabilityFunc">
-      <return-type type="SoupCacheability"/>
-      <parameters>
-        <parameter name="cache" type="SoupCache*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved5" cname="Soup_libsoupLibsoupReserved5Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="Sniff" cname="SoupSniffFunc">
-      <return-type type="gchar*" owned="true"/>
-      <parameters>
-        <parameter name="sniffer" type="SoupContentSniffer*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="buffer" type="SoupBuffer*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-        <parameter allow-none="1" name="params" type="GHashTable**" element_type="gchar*" elements_owned="true" owned="true" pass_as="out"/>
-      </parameters>
-    </callback>
-    <callback name="GetBufferSize" cname="SoupGetBufferSizeFunc">
-      <return-type type="gsize"/>
-      <parameters>
-        <parameter name="sniffer" type="SoupContentSniffer*"/>
-      </parameters>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved5" cname="Soup_libsoupLibsoupReserved5Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="Save" cname="SoupSaveFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="jar" type="SoupCookieJar*"/>
-      </parameters>
-    </callback>
-    <callback name="IsPersistent" cname="SoupIsPersistentFunc">
-      <return-type type="gboolean"/>
-      <parameters>
-        <parameter name="jar" type="SoupCookieJar*"/>
-      </parameters>
-    </callback>
-    <callback name="Changed" cname="SoupChangedFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="jar" type="SoupCookieJar*"/>
-        <parameter name="old_cookie" type="SoupCookie*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-        <parameter name="new_cookie" type="SoupCookie*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-      </parameters>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="WroteInformational" cname="SoupWroteInformationalFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="WroteHeaders" cname="SoupWroteHeadersFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="WroteChunk" cname="SoupWroteChunkFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="WroteBody" cname="SoupWroteBodyFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="GotInformational" cname="SoupGotInformationalFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="GotHeaders" cname="SoupGotHeadersFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="GotChunk" cname="SoupGotChunkFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="chunk" type="SoupBuffer*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-      </parameters>
-    </callback>
-    <callback name="GotBody" cname="SoupGotBodyFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="Restarted" cname="SoupRestartedFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="Finished" cname="SoupFinishedFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="GetProxyUriAsync" cname="SoupGetProxyUriAsyncFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="proxy_uri_resolver" type="SoupProxyURIResolver*"/>
-        <parameter name="uri" type="SoupURI*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-        <parameter allow-none="1" name="async_context" type="GMainContext*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-        <parameter allow-none="1" name="cancellable" type="GCancellable*"/>
-        <parameter scope="async" name="callback" type="SoupProxyURIResolverCallback"/>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="GetProxyUriSync" cname="SoupGetProxyUriSyncFunc">
-      <return-type type="guint"/>
-      <parameters>
-        <parameter name="proxy_uri_resolver" type="SoupProxyURIResolver*"/>
-        <parameter name="uri" type="SoupURI*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-        <parameter allow-none="1" name="cancellable" type="GCancellable*"/>
-        <parameter name="proxy_uri" type="SoupURI**" owned="true" pass_as="out">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-      </parameters>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="CheckUri" cname="SoupCheckUriFunc">
-      <return-type type="gboolean"/>
-      <parameters throws="1">
-        <parameter name="req_base" type="SoupRequest*"/>
-        <parameter name="uri" type="SoupURI*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-        <parameter name="error" type="GError**"/>
-      </parameters>
-    </callback>
-    <callback name="Send" cname="SoupSendFunc">
-      <return-type type="GInputStream*" owned="true"/>
-      <parameters throws="1">
-        <parameter name="request" type="SoupRequest*"/>
-        <parameter allow-none="1" name="cancellable" type="GCancellable*"/>
-        <parameter name="error" type="GError**"/>
-      </parameters>
-    </callback>
-    <callback name="SendAsync" cname="SoupSendAsyncFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="request" type="SoupRequest*"/>
-        <parameter allow-none="1" name="cancellable" type="GCancellable*"/>
-        <parameter scope="async" allow-none="1" name="callback" type="GAsyncReadyCallback"/>
-        <parameter name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="SendFinish" cname="SoupSendFinishFunc">
-      <return-type type="GInputStream*" owned="true"/>
-      <parameters throws="1">
-        <parameter name="request" type="SoupRequest*"/>
-        <parameter name="_result" type="GAsyncResult*"/>
-        <parameter name="error" type="GError**"/>
-      </parameters>
-    </callback>
-    <callback name="GetContentLength" cname="SoupGetContentLengthFunc">
-      <return-type type="gint64"/>
-      <parameters>
-        <parameter name="request" type="SoupRequest*"/>
-      </parameters>
-    </callback>
-    <callback name="GetContentType" cname="SoupGetContentTypeFunc">
-      <return-type type="const-gchar*"/>
-      <parameters>
-        <parameter name="request" type="SoupRequest*"/>
-      </parameters>
-    </callback>
-    <callback name="RequestStarted" cname="SoupRequestStartedFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="server" type="SoupServer*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="client" type="SoupClientContext*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-      </parameters>
-    </callback>
-    <callback name="RequestRead" cname="SoupRequestReadFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="server" type="SoupServer*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="client" type="SoupClientContext*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-      </parameters>
-    </callback>
-    <callback name="RequestFinished" cname="SoupRequestFinishedFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="server" type="SoupServer*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="client" type="SoupClientContext*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-      </parameters>
-    </callback>
-    <callback name="RequestAborted" cname="SoupRequestAbortedFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="server" type="SoupServer*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="client" type="SoupClientContext*">
-          <warning>missing glib:type-name</warning>
-        </parameter>
-      </parameters>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="RequestStarted" cname="SoupRequestStartedFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="session" type="SoupSession*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="socket" type="SoupSocket*"/>
-      </parameters>
-    </callback>
-    <callback name="Authenticate" cname="SoupAuthenticateFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="session" type="SoupSession*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="auth" type="SoupAuth*"/>
-        <parameter name="retrying" type="gboolean"/>
-      </parameters>
-    </callback>
-    <callback name="QueueMessage" cname="SoupQueueMessageFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="session" type="SoupSession*"/>
-        <parameter name="msg" type="SoupMessage*" owned="true"/>
-        <parameter scope="async" allow-none="1" name="callback" type="SoupSessionCallback"/>
-        <parameter allow-none="1" name="user_data" type="gpointer"/>
-      </parameters>
-    </callback>
-    <callback name="RequeueMessage" cname="SoupRequeueMessageFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="session" type="SoupSession*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="SendMessage" cname="SoupSendMessageFunc">
-      <return-type type="guint"/>
-      <parameters>
-        <parameter name="session" type="SoupSession*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="CancelMessage" cname="SoupCancelMessageFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="session" type="SoupSession*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="status_code" type="guint"/>
-      </parameters>
-    </callback>
-    <callback name="AuthRequired" cname="SoupAuthRequiredFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="session" type="SoupSession*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="auth" type="SoupAuth*"/>
-        <parameter name="retrying" type="gboolean"/>
-      </parameters>
-    </callback>
-    <callback name="FlushQueue" cname="SoupFlushQueueFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="session" type="SoupSession*"/>
-      </parameters>
-    </callback>
-    <callback name="Kick" cname="SoupKickFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="session" type="SoupSession*"/>
-      </parameters>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="Attach" cname="SoupAttachFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="feature" type="SoupSessionFeature*"/>
-        <parameter name="session" type="SoupSession*"/>
-      </parameters>
-    </callback>
-    <callback name="Detach" cname="SoupDetachFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="feature" type="SoupSessionFeature*"/>
-        <parameter name="session" type="SoupSession*"/>
-      </parameters>
-    </callback>
-    <callback name="RequestQueued" cname="SoupRequestQueuedFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="feature" type="SoupSessionFeature*"/>
-        <parameter name="session" type="SoupSession*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="RequestStarted" cname="SoupRequestStartedFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="feature" type="SoupSessionFeature*"/>
-        <parameter name="session" type="SoupSession*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-        <parameter name="socket" type="SoupSocket*"/>
-      </parameters>
-    </callback>
-    <callback name="RequestUnqueued" cname="SoupRequestUnqueuedFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter name="feature" type="SoupSessionFeature*"/>
-        <parameter name="session" type="SoupSession*"/>
-        <parameter name="msg" type="SoupMessage*"/>
-      </parameters>
-    </callback>
-    <callback name="AddFeature" cname="SoupAddFeatureFunc">
-      <return-type type="gboolean"/>
-      <parameters>
-        <parameter name="feature" type="SoupSessionFeature*"/>
-        <parameter name="type" type="GType"/>
-      </parameters>
-    </callback>
-    <callback name="RemoveFeature" cname="SoupRemoveFeatureFunc">
-      <return-type type="gboolean"/>
-      <parameters>
-        <parameter name="feature" type="SoupSessionFeature*"/>
-        <parameter name="type" type="GType"/>
-      </parameters>
-    </callback>
-    <callback name="HasFeature" cname="SoupHasFeatureFunc">
-      <return-type type="gboolean"/>
-      <parameters>
-        <parameter name="feature" type="SoupSessionFeature*"/>
-        <parameter name="type" type="GType"/>
-      </parameters>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="Readable" cname="SoupReadableFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter type="SoupSocket*"/>
-      </parameters>
-    </callback>
-    <callback name="Writable" cname="SoupWritableFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter type="SoupSocket*"/>
-      </parameters>
-    </callback>
-    <callback name="Disconnected" cname="SoupDisconnectedFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter type="SoupSocket*"/>
-      </parameters>
-    </callback>
-    <callback name="NewConnection" cname="SoupNewConnectionFunc">
-      <return-type type="void"/>
-      <parameters>
-        <parameter type="SoupSocket*"/>
-        <parameter type="SoupSocket*"/>
-      </parameters>
-    </callback>
-    <callback name="_libsoupLibsoupReserved1" cname="Soup_libsoupLibsoupReserved1Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved2" cname="Soup_libsoupLibsoupReserved2Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved3" cname="Soup_libsoupLibsoupReserved3Func">
-      <return-type type="void"/>
-    </callback>
-    <callback name="_libsoupLibsoupReserved4" cname="Soup_libsoupLibsoupReserved4Func">
-      <return-type type="void"/>
-    </callback>
     <object name="Global" cname="SoupGlobal" opaque="true">
       <method name="AddCompletion" cname="soup_add_completion" shared="true">
         <return-type type="GSource*" owned="true">
@@ -4063,7 +3714,7 @@
         <return-type type="gchar*" owned="true"/>
         <parameters>
           <parameter name="first_field" type="const-gchar*"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg1" type="va_list"/>
         </parameters>
       </method>
       <method name="FormEncodeDatalist" cname="soup_form_encode_datalist" shared="true">
@@ -4093,7 +3744,7 @@
           <parameter name="method" type="const-gchar*"/>
           <parameter name="uri" type="const-gchar*"/>
           <parameter name="first_field" type="const-gchar*"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg3" type="va_list"/>
         </parameters>
       </method>
       <method name="FormRequestNewFromDatalist" cname="soup_form_request_new_from_datalist" shared="true">
@@ -4246,6 +3897,9 @@
           </parameter>
         </parameters>
       </method>
+      <method name="RequestErrorQuark" cname="soup_request_error_quark" shared="true">
+        <return-type type="guint32"/>
+      </method>
       <method name="RequesterErrorQuark" cname="soup_requester_error_quark" shared="true">
         <return-type type="guint32"/>
       </method>
@@ -4317,7 +3971,7 @@
             <warning>missing glib:type-name</warning>
           </parameter>
           <parameter name="type" type="GType"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg2" type="va_list"/>
         </parameters>
       </method>
       <method name="ValueArrayAppendVals" cname="soup_value_array_append_vals" shared="true">
@@ -4327,7 +3981,7 @@
             <warning>missing glib:type-name</warning>
           </parameter>
           <parameter name="first_type" type="GType"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg2" type="va_list"/>
         </parameters>
       </method>
       <method name="ValueArrayFromArgs" cname="soup_value_array_from_args" shared="true">
@@ -4346,7 +4000,7 @@
           </parameter>
           <parameter name="index_" type="guint"/>
           <parameter name="type" type="GType"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg3" type="va_list"/>
         </parameters>
       </method>
       <method name="ValueArrayInsert" cname="soup_value_array_insert" shared="true">
@@ -4357,7 +4011,7 @@
           </parameter>
           <parameter name="index_" type="guint"/>
           <parameter name="type" type="GType"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg3" type="va_list"/>
         </parameters>
       </method>
       <method name="ValueArrayNew" cname="soup_value_array_new" shared="true">
@@ -4371,7 +4025,7 @@
         </return-type>
         <parameters>
           <parameter name="first_type" type="GType"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg1" type="va_list"/>
         </parameters>
       </method>
       <method name="ValueArrayToArgs" cname="soup_value_array_to_args" shared="true">
@@ -4389,7 +4043,7 @@
           <parameter name="hash" type="GHashTable*" element_type="const-gchar*"/>
           <parameter name="key" type="const-gchar*"/>
           <parameter name="type" type="GType"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg3" type="va_list"/>
         </parameters>
       </method>
       <method name="ValueHashInsertVals" cname="soup_value_hash_insert_vals" shared="true">
@@ -4397,7 +4051,7 @@
         <parameters>
           <parameter name="hash" type="GHashTable*" element_type="const-gchar*"/>
           <parameter name="first_key" type="const-gchar*"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg2" type="va_list"/>
         </parameters>
       </method>
       <method name="ValueHashInsertValue" cname="soup_value_hash_insert_value" shared="true">
@@ -4416,7 +4070,7 @@
           <parameter name="hash" type="GHashTable*" element_type="const-gchar*"/>
           <parameter name="key" type="const-gchar*"/>
           <parameter name="type" type="GType"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg3" type="va_list"/>
         </parameters>
       </method>
       <method name="ValueHashLookupVals" cname="soup_value_hash_lookup_vals" shared="true">
@@ -4424,7 +4078,7 @@
         <parameters>
           <parameter name="hash" type="GHashTable*" element_type="const-gchar*"/>
           <parameter name="first_key" type="const-gchar*"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg2" type="va_list"/>
         </parameters>
       </method>
       <method name="ValueHashNew" cname="soup_value_hash_new" shared="true">
@@ -4434,7 +4088,7 @@
         <return-type type="GHashTable*" element_type="gchar*" elements_owned="true" owned="true"/>
         <parameters>
           <parameter name="first_key" type="const-gchar*"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg1" type="va_list"/>
         </parameters>
       </method>
       <method name="XmlrpcBuildFault" cname="soup_xmlrpc_build_fault" shared="true">
@@ -4442,7 +4096,7 @@
         <parameters>
           <parameter name="fault_code" type="gint"/>
           <parameter name="fault_format" type="const-gchar*"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg2" type="va_list"/>
         </parameters>
       </method>
       <method name="XmlrpcBuildMethodCall" cname="soup_xmlrpc_build_method_call" shared="true">
@@ -4470,7 +4124,7 @@
           <parameter name="method_call" type="const-gchar*"/>
           <parameter name="length" type="gint"/>
           <parameter name="method_name" type="gchar*" owned="true" pass_as="out"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg3" type="va_list"/>
         </parameters>
       </method>
       <method name="XmlrpcExtractMethodResponse" cname="soup_xmlrpc_extract_method_response" shared="true">
@@ -4482,7 +4136,7 @@
             <warning>missing glib:type-name</warning>
           </parameter>
           <parameter name="type" type="GType"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg4" type="va_list"/>
         </parameters>
       </method>
       <method name="XmlrpcFaultQuark" cname="soup_xmlrpc_fault_quark" shared="true">
@@ -4515,7 +4169,7 @@
         <parameters>
           <parameter name="uri" type="const-gchar*"/>
           <parameter name="method_name" type="const-gchar*"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg2" type="va_list"/>
         </parameters>
       </method>
       <method name="XmlrpcSetFault" cname="soup_xmlrpc_set_fault" shared="true">
@@ -4524,7 +4178,7 @@
           <parameter name="msg" type="SoupMessage*"/>
           <parameter name="fault_code" type="gint"/>
           <parameter name="fault_format" type="const-gchar*"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg3" type="va_list"/>
         </parameters>
       </method>
       <method name="XmlrpcSetResponse" cname="soup_xmlrpc_set_response" shared="true">
@@ -4532,7 +4186,7 @@
         <parameters>
           <parameter name="msg" type="SoupMessage*"/>
           <parameter name="type" type="GType"/>
-          <parameter name="var_args" type="va_list"/>
+          <parameter name="arg2" type="va_list"/>
         </parameters>
       </method>
     </object>
@@ -4563,6 +4217,7 @@
       <constant value="host" ctype="gchar*" gtype="gchar*" name="AUTH_HOST"/>
       <constant value="is-authenticated" ctype="gchar*" gtype="gchar*" name="AUTH_IS_AUTHENTICATED"/>
       <constant value="is-for-proxy" ctype="gchar*" gtype="gchar*" name="AUTH_IS_FOR_PROXY"/>
+      <constant value="1" ctype="gint" gtype="gint" name="AUTH_MANAGER_H"/>
       <constant value="realm" ctype="gchar*" gtype="gchar*" name="AUTH_REALM"/>
       <constant value="scheme-name" ctype="gchar*" gtype="gchar*" name="AUTH_SCHEME_NAME"/>
       <constant value="1" ctype="gint" gtype="gint" name="CACHE_H"/>
@@ -4575,6 +4230,8 @@
       <constant value="1" ctype="gint" gtype="gint" name="CONTENT_SNIFFER_H"/>
       <constant value="1" ctype="gint" gtype="gint" name="COOKIE_H"/>
       <constant value="accept-policy" ctype="gchar*" gtype="gchar*" name="COOKIE_JAR_ACCEPT_POLICY"/>
+      <constant value="filename" ctype="gchar*" gtype="gchar*" name="COOKIE_JAR_DB_FILENAME"/>
+      <constant value="1" ctype="gint" gtype="gint" name="COOKIE_JAR_DB_H"/>
       <constant value="1" ctype="gint" gtype="gint" name="COOKIE_JAR_H"/>
       <constant value="read-only" ctype="gchar*" gtype="gchar*" name="COOKIE_JAR_READ_ONLY"/>
       <constant value="filename" ctype="gchar*" gtype="gchar*" name="COOKIE_JAR_TEXT_FILENAME"/>
@@ -4631,6 +4288,8 @@
       <constant value="tls-certificate" ctype="gchar*" gtype="gchar*" name="SERVER_TLS_CERTIFICATE"/>
       <constant value="accept-language" ctype="gchar*" gtype="gchar*" name="SESSION_ACCEPT_LANGUAGE"/>
       <constant value="accept-language-auto" ctype="gchar*" gtype="gchar*" name="SESSION_ACCEPT_LANGUAGE_AUTO"/>
+      <constant value="add-feature" ctype="gchar*" gtype="gchar*" name="SESSION_ADD_FEATURE"/>
+      <constant value="add-feature-by-type" ctype="gchar*" gtype="gchar*" name="SESSION_ADD_FEATURE_BY_TYPE"/>
       <constant value="async-context" ctype="gchar*" gtype="gchar*" name="SESSION_ASYNC_CONTEXT"/>
       <constant value="1" ctype="gint" gtype="gint" name="SESSION_ASYNC_H"/>
       <constant value="1" ctype="gint" gtype="gint" name="SESSION_FEATURE_H"/>
@@ -4638,9 +4297,12 @@
       <constant value="https-aliases" ctype="gchar*" gtype="gchar*" name="SESSION_HTTPS_ALIASES"/>
       <constant value="http-aliases" ctype="gchar*" gtype="gchar*" name="SESSION_HTTP_ALIASES"/>
       <constant value="idle-timeout" ctype="gchar*" gtype="gchar*" name="SESSION_IDLE_TIMEOUT"/>
+      <constant value="local-address" ctype="gchar*" gtype="gchar*" name="SESSION_LOCAL_ADDRESS"/>
       <constant value="max-conns" ctype="gchar*" gtype="gchar*" name="SESSION_MAX_CONNS"/>
       <constant value="max-conns-per-host" ctype="gchar*" gtype="gchar*" name="SESSION_MAX_CONNS_PER_HOST"/>
+      <constant value="proxy-resolver" ctype="gchar*" gtype="gchar*" name="SESSION_PROXY_RESOLVER"/>
       <constant value="proxy-uri" ctype="gchar*" gtype="gchar*" name="SESSION_PROXY_URI"/>
+      <constant value="remove-feature-by-type" ctype="gchar*" gtype="gchar*" name="SESSION_REMOVE_FEATURE_BY_TYPE"/>
       <constant value="ssl-ca-file" ctype="gchar*" gtype="gchar*" name="SESSION_SSL_CA_FILE"/>
       <constant value="ssl-strict" ctype="gchar*" gtype="gchar*" name="SESSION_SSL_STRICT"/>
       <constant value="ssl-use-system-ca-file" ctype="gchar*" gtype="gchar*" name="SESSION_SSL_USE_SYSTEM_CA_FILE"/>

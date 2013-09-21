@@ -4,3 +4,4 @@
 	<attr path="/api/namespace/object[@cname='SoupAuthDomain']/property[@name='GenericAuthCallback']" name="readable">0</attr>
 	<attr path="/api/namespace/boxed[@cname='SoupBuffer']/method[@cname='soup_buffer_get_data']/parameters/parameter[@name='length']" name="name">n_length</attr>
 </metadata>
+

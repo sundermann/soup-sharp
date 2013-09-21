@@ -5,6 +5,9 @@ DLL = $(top_srcdir)/out/$(ASSEMBLY_NAME).dll
 DLLMAP = $(top_srcdir)/out/$(ASSEMBLY_NAME).dll.config
 GLUEDIR = $(srcdir)/glue
 
+gapidir = $(GAPIXMLDIR)
+gapi_DATA = $(API)
+
 # Add any extra source files you need here
 sources =
 
@@ -33,13 +36,13 @@ $(API): $(srcdir)/$(RAW_API) $(srcdir)/$(METADATA)
 generated-stamp: $(API)
 	 $(GAPI_CODEGEN) --generate $(srcdir)/$(API) $(GTK_SHARP_CFLAGS) \
 		--outdir=generated \
-		--glue-filename=$(GLUEDIR)/generated.c --gluelib-name=libsoupsharpglue-2.40.3.so \
-		--glue-includes=libsoup/soup.h,libsoup/soup-cache.h,libsoup/soup-requester.h,libsoup/soup-request-http.h,libsoup/soup-request-data.h,libsoup/soup-request-file.h \
+		--glue-filename=$(GLUEDIR)/generated.c --gluelib-name=libsoupsharpglue-2.42.2.so \
+		--glue-includes=libsoup/soup.h,libsoup/soup-cache.h,libsoup/soup-requester.h,libsoup/soup-request-http.h,libsoup/soup-request-data.h,libsoup/soup-request-file.h --gapidir=$(gapidir) \
 	 	--assembly-name=$(ASSEMBLY_NAME) && touch generated-stamp
 
 $(DLL): $(build_sources) generated-stamp
-	$(CSC) -nowarn:169 -unsafe -target:library $(GTK_SHARP_LIBS) \
-		$(build_sources)  generated/*.cs -out:$(DLL)
+	$(CSC) -nowarn:169 -unsafe -target:library \
+		$(build_sources)  $(GLIBSHARP_LIBS) generated/*.cs -out:$(DLL)
 
 install-data-local:
 	echo "$(GACUTIL) /i $(DLL) /f $(GACUTIL_FLAGS)";  \
