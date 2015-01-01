@@ -15,7 +15,7 @@ build_sources = AssemblyInfo.cs $(sources)
 
 CLEANFILES = $(DLL) generated-stamp generated/*.cs $(API)
 
-DISTCLEANFILES = AssemblyInfo.cs $(DLLMAP)
+DISTCLEANFILES = AssemblyInfo.cs
 
 noinst_DATA = $(DLL)
 
