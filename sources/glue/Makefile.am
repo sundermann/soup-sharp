@@ -17,4 +17,6 @@ libsoupsharpglue.dll: $(libsoupsharpglue_2_42_2_la_OBJECTS) libsoupsharpglue.rc 
 
 CLEANFILES = lib*.a lib*.dll
 
+DISTCLEANFILES = $(nodist_libsoupsharpglue_2_42_2_la_SOURCES)
+
 EXTRA_DIST =
