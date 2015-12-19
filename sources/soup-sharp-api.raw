@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <api parser_version="3">
-  <namespace name="Soup" library="soup-2.4">
+  <namespace name="Soup" library="libsoup-2.4">
     <enum name="AddressFamily" cname="SoupAddressFamily" type="enum" gtype="soup_address_family_get_type">
       <member cname="SOUP_ADDRESS_FAMILY_INVALID" name="Invalid" value="-1"/>
       <member cname="SOUP_ADDRESS_FAMILY_IPV4" name="Ipv4" value="2"/>
