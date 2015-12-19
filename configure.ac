@@ -119,6 +119,9 @@ if test "x$GAPI_CODEGEN" = "xno"; then
 fi
 AC_SUBST(GAPI_CODEGEN)
 
+GAPIXMLDIR=`pkg-config --variable=gapidir gtk-sharp-3.0`
+AC_SUBST(GAPIXMLDIR)
+
 dnl Check for monodoc
 AC_PATH_PROG(MDASSEMBLER, mdassembler, no)
 AC_PATH_PROG(MONODOCER, monodocer, no)
