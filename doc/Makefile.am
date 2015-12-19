@@ -31,6 +31,7 @@ $(ASSEMBLY_NAME)-docs.zip $(ASSEMBLY_NAME)-docs.tree: $(srcdir)/en/*/*.xml $(src
 	$(MDASSEMBLER) --ecma $(srcdir)/en -o $(ASSEMBLY_NAME)-docs
 
 CLEANFILES = $(TARGETS)
+DISTCLEANFILES = $(srcdir)/en/*/*.xml $(srcdir)/en/*.xml
 
 NAMESPACES=$(ASSEMBLY_NAMESPACE)
 

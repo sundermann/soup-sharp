@@ -1,3 +1,5 @@
+ACLOCAL_AMFLAGS = -I m4
+
 SUBDIRS = sources sources/glue doc
 
 pkgconfigdir = $(libdir)/pkgconfig

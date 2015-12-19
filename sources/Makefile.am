@@ -13,9 +13,9 @@ sources =
 
 build_sources = AssemblyInfo.cs $(sources)
 
-CLEANFILES = $(DLL) generated-stamp generated/*.cs $(API)
+CLEANFILES = $(DLL) generated-stamp generated/*/*.cs $(API)
 
-DISTCLEANFILES = AssemblyInfo.cs $(DLLMAP)
+DISTCLEANFILES = AssemblyInfo.cs
 
 noinst_DATA = $(DLL)
 
@@ -42,7 +42,7 @@ generated-stamp: $(API)
 
 $(DLL): $(build_sources) generated-stamp
 	$(CSC) -nowarn:169 -unsafe -target:library \
-		$(build_sources)  $(GLIBSHARP_LIBS) $(GTK_SHARP_LIBS) generated/*.cs -out:$(DLL)
+		$(build_sources)  $(GLIBSHARP_LIBS) $(GTK_SHARP_LIBS) generated/*/*.cs -out:$(DLL)
 
 install-data-local:
 	echo "$(GACUTIL) /i $(DLL) /f $(GACUTIL_FLAGS)";  \

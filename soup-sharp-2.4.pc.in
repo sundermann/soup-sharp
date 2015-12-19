@@ -2,9 +2,11 @@ prefix=@prefix@
 exec_prefix=${prefix}
 libdir=@libdir@
 pkglibdir=${exec_prefix}/lib/mono/@ASSEMBLY_NAME@
+gapidir=@GAPIXMLDIR@
 
 Name: @ASSEMBLY_TITLE@
 Description: @ASSEMBLY_DESCRIPTION@
 Version: @VERSION@
 Requires: 
 Libs: -r:${pkglibdir}/@ASSEMBLY_NAME@.dll
+Cflags: -I:${gapidir}/soup-sharp-api.xml
